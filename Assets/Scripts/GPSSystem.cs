@@ -4,9 +4,18 @@ using UnityEngine.UI;
 
 public class GPSSystem : MonoBehaviour
 {
+    /*
+     * GPS로 현재 기기 위치와 googlemap 갱신 
+     */
+    
     public Text latitudeText = null;
     public Text longitudeText = null;
     public GoogleMap map = null;
+
+    float latitude = 0f;
+    float longitude = 0f;
+
+    Navigation navigation = null;
 
     IEnumerator Start()
     {
@@ -14,11 +23,12 @@ public class GPSSystem : MonoBehaviour
         if (!Input.location.isEnabledByUser)
             yield break;
 
-        // 위치를 조회하기 전에 서비스를 시작합니다.
+        // 위치를 조회하기 전에 서비스를 시작한다.
         Input.location.Start(0.5f);
 
-        // 서비스 시작하기 전까지 대기 합니다.
+        // 서비스 시작하기 전까지 대기 한다.
         int maxWait = 20;
+
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
             yield return new WaitForSeconds(1);
@@ -40,29 +50,36 @@ public class GPSSystem : MonoBehaviour
         }
         else
         {
-            Character character = GameObject.FindObjectOfType<Character>();
+            navigation = GameObject.FindObjectOfType<Navigation>();
 
             //  1초마다 자신의 위치를 갱신해서 구글맵 수정
             while(true)
             {
-                latitudeText.text = Input.location.lastData.latitude.ToString();
-                longitudeText.text = Input.location.lastData.longitude.ToString();
+                latitude = Input.location.lastData.latitude;
+                longitude = Input.location.lastData.longitude;
 
-                map.centerLocation.latitude = Input.location.lastData.latitude;
-                map.centerLocation.longitude = Input.location.lastData.longitude;
+                latitudeText.text = "위도 : " + latitude.ToString();
+                longitudeText.text = "경도 : " + longitude.ToString();
 
-                character.UpdateMyPosition(Input.location.lastData.latitude, Input.location.lastData.longitude);
-                
-                //print(Input.location.status.ToString());
-                //Access granted and location value could be retrieved
-                //print("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp);
+                //  현재 위치를 맵 중앙에 위치하게끔 한다.
+                map.centerLocation.latitude = latitude;
+                map.centerLocation.longitude = longitude;
+
+                //  네비게이션에 업데이트된 현재위치좌표를 전달한다.
+                navigation.UpdateMyPosition(latitude, longitude);
+
                 yield return new WaitForSeconds(1);
             }
-
-           
         }
 
         // Stop service if there is no need to query location updates continuously
        // Input.location.Stop();
+    }
+
+    //  목적지 변경하기위해 씬 변경하면 모든 코르틴을 종료한다.
+    void OnDestroy()
+    {
+        Input.location.Stop();
+        StopAllCoroutines();
     }
 }
