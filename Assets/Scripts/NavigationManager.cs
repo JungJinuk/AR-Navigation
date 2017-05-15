@@ -10,14 +10,11 @@ public class NavigationManager : MonoBehaviour
 
     Navigation navigation = null;
 
-    void Awake()
+    void Start()
     {
         navigation = GameObject.FindObjectOfType<Navigation>();
         DestinationInit();
-    }
 
-    void Start()
-    {
         destinationGUI.text = "목적지 : " + destinationText;
     }
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraAxis
   - CharacterAxis
+  - Arrow
   layers:
   - Default
   - TransparentFX
