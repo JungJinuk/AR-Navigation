@@ -59,7 +59,22 @@ public class Navigation : MonoBehaviour
         }
 
         //  현재 기기의 북쪽을 기준으로 한 회전각( 0 ~ 360 )
-        trueHeading = Input.compass.trueHeading;
+        //  정상적으로 들고있을 때
+        if (Input.acceleration.z < 0f)
+        {
+            trueHeading = Input.compass.trueHeading;
+        }
+        else //  뒤집혔을 떄
+        {
+            if (Input.compass.trueHeading + 180f >= 360f)
+            {
+                trueHeading = Input.compass.trueHeading - 180f;
+            }
+            else
+            {
+                trueHeading = Input.compass.trueHeading + 180f;
+            }
+        }
     }
     
 
@@ -107,7 +122,7 @@ public class Navigation : MonoBehaviour
         {
             distanceText.text = "걸어가기엔 너무 멀어요!";
         }
-        else if (distance <= 3)
+        else if (distance <= 10)
         {
             //  도착
             distanceText.text = "근처에 도착하였습니다!";

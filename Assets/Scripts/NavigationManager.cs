@@ -48,6 +48,41 @@ public class NavigationManager : MonoBehaviour
                     longitude = 127.046117f;
                 }
                 break;
+            case "Humanities":
+                {
+                    destinationText = "인문대";
+                    latitude = 37.558341f;
+                    longitude = 127.043476f;
+                }
+                break;
+            case "FTC":
+                {
+                    destinationText = "FTC관";
+                    latitude = 37.554671f;
+                    longitude = 127.047321f;
+                }
+                break;
+            case "Gym":
+                {
+                    destinationText = "올림픽 체육관";
+                    latitude = 37.556516f;
+                    longitude = 127.049991f;
+                }
+                break;
+            case "HIT":
+                {
+                    destinationText = "종합기술연구동(HIT)";
+                    latitude = 37.557737f;
+                    longitude = 127.046972f;
+                }
+                break;
+            case "StudentHall":
+                {
+                    destinationText = "학생회관";
+                    latitude = 37.557562f;
+                    longitude = 127.044184f;
+                }
+                break;
             default:
                 {
                     // 목적지가 잘못되었습니다.
